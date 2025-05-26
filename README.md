@@ -1,3 +1,6 @@
+강의자료 및 실습자료
+https://samsung-ai.elice.io
+
 # multimodal 챗봇 제작
 
 ## 멀티모달 챗봇 개요
