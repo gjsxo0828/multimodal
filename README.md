@@ -41,4 +41,14 @@
   
 ### 멀티모달 예시(CLIP)
 1. CLIP (Contrastive Lanaguage-Image Pretraining)은 OpenAI에서 개발한 이미지-텍스트 멀티모달 모델이다.
+   - 이미지와 텍스트를 같은 임베딩 공간에서 학습시켜, 이미지와 텍스트를 연결하는 능력이 뛰어나다.
+2. CLIP은 대조 학습 (Contrastive Learining) 방식을 이용해 이미지와 텍스트를 연결한다.
+3. CLIP 모델을 할용한 다른 모델인 LAVVA 도 있다.
+
+### Diffusion Model
+학습과정 : 원본이미지에 노이즈를 추가하며 학습, 다시 노이즈를 제거하여 학습(디노이징)
+사용과정 : 노이즈만 생성한 이미지에 text 정보를 받아서 노이즈를 제거하면서 이미지를 추론하여 생성하는 과정을 진행함 
+conditioning으로 주는 매체(input)은 text 뿐만 아니라, Pose, 테이블, 범주형 등 다양한 포맷이 가능함.
+
+   
 
