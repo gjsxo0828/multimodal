@@ -1,4 +1,4 @@
-# multimodal
+# multimodal 챗봇 제작
 
 ## 멀티모달 챗봇 개요
 
@@ -302,7 +302,124 @@ Augmentation(증강) -> Encoding(Resnet) -> projection(MLP = Linear + ReLU)
   4. LLM은 검색된 문서 정보를 바탕으로 상대적으로 더 정확한 답변을 생성한다.  
   ![image](https://github.com/user-attachments/assets/d82ae7e3-cddd-4ffd-9540-00e79c4f0dc8)
 
+### RAG (Retrieval-Augmented Generation)
+- Retrieval-Augmentaed Generation
+  - 검색 증강 생성
+  - 모델이 실제 데이터를 회수하고(Regrieve)
+  - 이를 바탕으로 올바른 내용으로 유저의 질문과 함께 프롬프트를 증강하여(Augment)
+  - 신뢰할 수 있는 문장을 생성(Generate)하는 기술
+- 모델이 학습한 데이터 + 외부 데이터
+  - 현 시점에서 가장 사용하기 좋은 기술
+    - 금전적
+    - 기술적
+   
+### RAG 구조도
+![image](https://github.com/user-attachments/assets/d02632bf-00a0-4b94-b68e-383796d39f94)
 
+### Vector DB
+- Vector DB는 정보를 담고 있는 문서를 전처리 및 분할한 후 이에 대한 Chunk와 Embedding 과정을 거친 Vector를 저장한 DB를 의미
+- Chunk와 Embedding 과정을 거친 Vector를 저장한 DB를 의미
 
+### 구체적인 Retrieval (검색) 예시
+![image](https://github.com/user-attachments/assets/7aecba25-7020-49ce-8b5b-4ea380c3a6da)
 
+### Infromation Retrieval 구조도
+- RAG의 절차중 Reranking이 필요한 부분
+  - 데이터 벡터화 (Vectorization)
+    - 데이터를 기계 학습 알고리즘이 이해할 수 있는 형태로 변환하는 것
+    - 데이터의 형식이 아닌 의미를 수치로 환산하는 과정
+    - 단어, 문장, 문서 등 다양한 수준의 텍스트 데이터를 벡터로 표현할 수 있음.
+    - 최초에는 랜덤으로 배치가되고 학습을 통해 Embedding 모델도 고도화가 됨
+  - 인덱싱
+  - 벡터 DB 저장
+  - 쿼리 기반 검색 및 회수
+  - 후처리
 
+### DB
+- 관계형 데이터베이서,RDBMS (Relational Data Base Managment System) 
+  - 기존 데이터 베이스는 테이블 형식으로 데이터를 저장하고 관리
+  - Row(행)마다 단일 Record/sample을 표현
+  - Column(열)마다 데이터의 속성(Attribue)를 나타내며, 수치/문자열 등의 데이터만 기재 가능
+  - 2차원 형식의 데이터만 저장 가능 -> 제약 사항 많음
+  - 비정형 데이터베이스는 관리하기 어려움
+
+- 벡터 DB
+  - 비정형 데이터 (텍스트, 이미지, 음성 등)을 벡터로 변환
+  - 의마상 검색(Semantic search)이 가능
+  - 하나의 모달리티를 바탕으로 다른 모달리티도 검색 가능함
+  - 기존 DB에 비해 크기가 작음
+  - 거리, 각도, 내적 등으로 벡터간 유사도 계싼 가능
+
+### 벡터 
+- 희소 벡터(Sparse vector)
+  - 몇몇 데이터는 1이고 나머지는 모두 0인 벡터
+  - 행/열에 1인 값이 하나만 존재할 경우 One-hot encoding이라 함
+  - 특정 단어를 표현할 때, 벡터에서 그 단어에 해당하는 인덱스만 1이고 나머지는 모두 0
+  - 단어장(Vocabulary)의 크기를 벡터의 차원으로 하며, 각 단어는 단어장에서의 위치(Index)에 따라 하나의 차원에 1의 값을 가짐
+  - 유사성등 관계를 알기가 어려움
+  - wjdqh rjator(IR) 분야에서 재활용
+  - 빈도 기반 Embedding방법 : TF-IDF
+ 
+- 밀집 벡터(Dense vector)
+  - 정수 혹은 0이 아닌 소수로 표현
+  - 데이터의 특징을 표현할 경우, 이들 간의 거리, 연관성 등을 계산하여 유사도를 파악할 수 있음
+  - 또한 세밀하고 정교한 의미 표현이 가능하며, 의미 기반 검색이 가능
+ 
+ ### TF-IDF (Term Frequency-Inverse Document Frequency)
+ - TF(Term Frequency)
+   - 특정 단어가 하나의 문서(d)내에서 등장하는 비율
+   - 등장횟수 / 문서 내 전체 단어수
+   - 이는 단어가 문서 내에서 얼마나 중요한지를 나타내는 지표
+ - IDF(Inverse Document Frequency)
+   - 특정 단어가 등장하는 모든 문서의 수 (D)의 역
+   - 희소할수록 중요도가 높다고 판단
+   - 모든 문서에서 자주 등장하는 단어는 중요도가 낮다고 판단
+   - 특정 문서에서만 자주 등장하는 단어는 중요도가 높다고 판다.
+ - TF-IDF
+   - TF*IDF
+   - 값이 높을수록 단어의 중요도가 높다고 판단
+   - 단어의 빈도와 문서 내에서의 중요도를 동시에 반영하게 됨
+   - VectorDB의 텍스트와 쿼리 간 문서 내 단어 빈도를 바탕으로 검색
+  
+### retriever    
+ - Sparse retriever
+   - 문서/쿼리에서 등장하는 단어나 키워드를 기반으로 검색하는 기법
+   - Embedding이 의미 기반이 아닌 빈도 기반으로 수행됨
+   - 속도적 이점이 크지만 정확도가 떨어짐
+ - Dense retriever
+   - DL 모델을 통해 학습된 임베딩을 활용하여 검색하는 방법
+   - 또는 BERT, RoBERTa 등의 모델로 질의와 문서의 의미를 벡터  공간에 매핑하여 유사도를 측정
+   - 키워드가 일치하지 않더라도 의미상 동일한 문서를 검색할 수 있음
+ - Hybrid search
+   - 동일한 Chunk를 서로 다른 두 벡터 DB로 구성하거나
+   - 한 벡터 DB 내 동일 Chunk에 대하여 두가지 key값
+   - ![image](https://github.com/user-attachments/assets/1ec96c19-fd45-4191-a528-70a9e8e31c04)
+   - Sparse retriever
+     - 키워드 기반 검색을 통한 핵심 단어 일치 여부 능력
+     - 키워드가 포함되지 않은 경우 존재
+   - Dense retriever
+     - 의미 기반 검색(Semantic search)를 통하여, 메뉴얼 검색 단점 보완
+     - 
+  
+---
+
+## Rerank
+- 같은 유사 문서 순서에 따라 답변 성능이 크게 달라지는 현상이 관측됨
+- LLM은 입력된 문서 청크들을 순서대로 읽는데 주로 초반에 봤던 내용에 더 많은 attention 할당 경향이 있음
+  - 첫정보는 누적이되고, 마지막 정보는 최신정보기 때문에 참고를 더 많이 봄
+  - ![image](https://github.com/user-attachments/assets/aa279038-30ee-4f3f-b297-ff3a83bf8800)
+
+- 처리할 수 있는 토큰의 한계가 존재하기 때문에 덜 참고하거나 무시될 수 있음
+- 정보검색(IR) 시스템에서 2단계 랭킹을 수행하는 기법
+  - 초기 검색 단계에서 비교적 빠르게 후보 문서 집합을 검색하여 다수를 수집한 뒤
+  - 후속 단곙서 보다 정교한 알고리즘/모델로 재정렬 및 필터링 하는 절차
+
+### 주요 Reranking 알고리즘
+- BERT 기반 Cross-Encoder Reranker
+  - 가장 대표적인 방식
+  - 쿼리와 문서를 하나의 입력 시퀀스로 함께 Transformer에 투입
+    - 관련성 점수 산출
+    - 이를 기준으로 정렬
+  - 정교한 계산 및 매칭이 가능하나
+  - 모든 Chunk에 대하여 Query와 대조해야 하므로 시간과 비용 효율이 낮음
+ 
