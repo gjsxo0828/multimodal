@@ -252,3 +252,57 @@ Augmentation(증강) -> Encoding(Resnet) -> projection(MLP = Linear + ReLU)
  - LLaVA를 이용한 숫자 인식 (별도 모델 제작 불필요)
  - LLaVA를 이용한 동물 사진 인식 (이미지 분류)
 
+
+---
+
+## RAG
+
+### LLM 문제점1 - Hallucination
+- Hallucination(환각)
+  - 사실에 아닌 것을 사실인 듯 얘기하는 현상
+  - 발생원인
+    - 문장 생성 메커니즘이 확률 기반
+    - 모델이 학습하지 못한 데이터
+    - 학습된 데이터가 충분하지 않은 경우
+    - 사용자가 제공한 정보를 참으로 가정하는 경우
+    - 텍스트를 통한 이미지 생성 분야에서도 자주 발생
+ - ![image](https://github.com/user-attachments/assets/2d21ee80-1496-4df2-bcee-a458c05d9eae)
+
+### in-context learning
+  - LLM이 별도의 파라미터 업데이트나 추가 학습(fine-tuning)업이, 프롬프트에 주어진 예시(입력-출력 쌍)만으로 새로운 작업을 수행하는 능력
+  - 인간의 유추(anology)능력과 유사하게 모델이 예시를 보고 새로운 입력에 대해 유사한 방식으로 답변
+  - 프롬프트 엔지니어링의 구현 방안
+    - 문장의 긍부정 감정 예측
+    - ![image](https://github.com/user-attachments/assets/579d5a7c-4067-438e-a6b7-3eed89278d52)
+   
+### Prompt Engineering
+- 프롬프트 엔지니어링
+  - LLM이 갖고 있는 In-Context learing 성능에 근거
+  - 자연어처리 모델을 효율적으로 활용하기 위해 프롬프트를 설계하고 최적화하는 과정
+  - LLM에게 입력되는 프롬프트를 가공하여 모델의 효율을 최대화하기 위한 방법
+  - 추가학습(Full/Fine-tuning) 없이, 입력 값을 가공하여 모델의 성능을 높이기 위한 방법
+  - LLM 활용시 필수 기술이나, 그 중요도는 갈수록 감소하고 있음
+- RAG는 프롬프트 엔지니어링의 연장선
+
+### Why RAG
+- 모든 언어 모델은 세상을 확률로 판다.
+  - 단어의 등장 순서와 관계 : 확률
+  - 문장의 조립 및 사용 여부 : 확률
+  - 정보를 학습/답변을 생성하는 과정에서 정확도가 떨어짐
+- 확률론적 관점은 사실/등장을 구분하지 못함
+  - 모델의 사실적인 정보를 장담할 수 없음
+  - Hallucination
+  - 현업에서 LLM을 사용하기 어려운 이유 중 가장 직접적
+ 
+### RAG(검색 증강 생성)
+- RAG의 대략적인 진행 과정은 다음을 따름 :
+  1. 사전에 정보를 담고 있는 문서를 일정 크기(Chunk)로 나눠서 Vector DB로 저장함
+  2. 사용자의 입력과 유사한 K개의 문서를 검색 (Retrieve) 한다.
+  3. 사용자의 입력에 검색된 문서를 더해 증강된 (Augmented) 프롬프트를 LLM에 입력한다.
+  4. LLM은 검색된 문서 정보를 바탕으로 상대적으로 더 정확한 답변을 생성한다.
+  ![image](https://github.com/user-attachments/assets/d82ae7e3-cddd-4ffd-9540-00e79c4f0dc8)
+
+
+
+
+
