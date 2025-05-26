@@ -222,7 +222,7 @@ Augmentation(증강) -> Encoding(Resnet) -> projection(MLP = Linear + ReLU)
   - 일반적으로 엄격한 논리를 따르는 단계별 추론 과정을 거침
   - 77K 생성
  
-- LLAVA architecture (ViT 계열 모델)
+- LLAVA architecture (ViT 계열 모델)  
   ![image](https://github.com/user-attachments/assets/5cbed2d0-beb9-4d48-8da0-d1ba5305e4d3)
 
   14*14 크기로 이미지를 slicing하여 patch화 하고, instruction은 "Vicuna" Language model을 사용하였음
@@ -230,12 +230,12 @@ Augmentation(증강) -> Encoding(Resnet) -> projection(MLP = Linear + ReLU)
 
 - LLAVA dataset 구성
   - 각 이미지 Xv에 대해서 T개의 multiturn conversation data
-  - t번째 instruction
+  - t번째 instruction  
     ![image](https://github.com/user-attachments/assets/47622086-83ad-44d0-a991-7b3b1a916b33)
 
 - LLAVA Training (이전에 사용한 예측 학습모델을 누적해서 사용)
   - auto-regressive training objective 사용
-  - L개의 sequence에 대한 Xa의 확률 계산
+  - L개의 sequence에 대한 Xa의 확률 계산  
     ![image](https://github.com/user-attachments/assets/367ce020-8021-41d9-a6f7-ad47c0cecfdf)
 
 - LLAVA 문제점
@@ -265,14 +265,14 @@ Augmentation(증강) -> Encoding(Resnet) -> projection(MLP = Linear + ReLU)
     - 모델이 학습하지 못한 데이터
     - 학습된 데이터가 충분하지 않은 경우
     - 사용자가 제공한 정보를 참으로 가정하는 경우
-    - 텍스트를 통한 이미지 생성 분야에서도 자주 발생
+    - 텍스트를 통한 이미지 생성 분야에서도 자주 발생  
  - ![image](https://github.com/user-attachments/assets/2d21ee80-1496-4df2-bcee-a458c05d9eae)
 
 ### in-context learning
   - LLM이 별도의 파라미터 업데이트나 추가 학습(fine-tuning)업이, 프롬프트에 주어진 예시(입력-출력 쌍)만으로 새로운 작업을 수행하는 능력
   - 인간의 유추(anology)능력과 유사하게 모델이 예시를 보고 새로운 입력에 대해 유사한 방식으로 답변
   - 프롬프트 엔지니어링의 구현 방안
-    - 문장의 긍부정 감정 예측
+    - 문장의 긍부정 감정 예측   
     - ![image](https://github.com/user-attachments/assets/579d5a7c-4067-438e-a6b7-3eed89278d52)
    
 ### Prompt Engineering
@@ -299,7 +299,7 @@ Augmentation(증강) -> Encoding(Resnet) -> projection(MLP = Linear + ReLU)
   1. 사전에 정보를 담고 있는 문서를 일정 크기(Chunk)로 나눠서 Vector DB로 저장함
   2. 사용자의 입력과 유사한 K개의 문서를 검색 (Retrieve) 한다.
   3. 사용자의 입력에 검색된 문서를 더해 증강된 (Augmented) 프롬프트를 LLM에 입력한다.
-  4. LLM은 검색된 문서 정보를 바탕으로 상대적으로 더 정확한 답변을 생성한다.
+  4. LLM은 검색된 문서 정보를 바탕으로 상대적으로 더 정확한 답변을 생성한다.  
   ![image](https://github.com/user-attachments/assets/d82ae7e3-cddd-4ffd-9540-00e79c4f0dc8)
 
 
