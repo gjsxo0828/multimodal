@@ -193,6 +193,7 @@ download_image(
     "./images/raccoon.jpg"
 )
 ```
+> 다운로드 실패: 403 Client Error: Forbidden. Please comply with the User-Agent policy: https://meta.wikimedia.org/wiki/User-Agent_policy for url: https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Raccoon_in_Central_Park_%2835264%29.jpg/440px-Raccoon_in_Central_Park_%2835264%29.jpg
 
 ```python
 Image(filename='./images/raccoon.jpg')
