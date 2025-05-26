@@ -85,6 +85,7 @@ def build_inputs_with_special_tokens(self, token_ids_0, token_ids_1=None):
 # AutoTokenizer에 위에서 정의한 build_inputs_with_special_tokens 함수 할당
 AutoTokenizer.build_inputs_with_special_tokens = build_inputs_with_special_tokens
 ```
+![image](https://github.com/user-attachments/assets/14527c19-6309-4780-8a9c-365af895c798)
 
 ### Annotation dataframe
 
