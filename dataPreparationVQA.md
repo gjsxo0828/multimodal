@@ -102,12 +102,12 @@ Image(filename='./images/confusing.jpg')
 ```python
 print(llava_call("What is unusual about this image?", "./images/confusing.jpg"))
 ```
->  The image appears to be digitally altered or a composite of two separate scenes. It shows a person sitting on top of a dryer, seemingly in motion with the vehicle, which is highly unusual as it's not a typical place for someone to sit while a vehicle is moving. The juxtaposition creates a surreal and comical effect, as laundry machines are stationary appliances found indoors, typically in laundromats or homes, rather than on top of cars in traffic. 
+> The image depicts a situation that is unusual because it shows a person standing on the back of a vehicle, seemingly holding onto a dry cleaning service advertisement. This is not a common sight and is likely staged for humorous or promotional purposes. It's an example of people being used in advertisements to draw attention and create a memorable image. The scene also includes elements typical of city life such as a taxi, a pedestrian with luggage, and a busy street, which adds to the unconventional nature of this scene. 
 
 ```python
 print(llava_call("What’s happening in the scene?", "./images/confusing.jpg"))
 ```
->  The image shows a person standing on the back of a yellow taxi with their arms outstretched. They appear to be balancing or performing some action that requires stability. The person is dressed in casual clothes, and there's no clear context provided by the background, which includes a city street with other vehicles and buildings that suggest an urban environment. This scenario seems unusual and possibly staged for entertainment or artistic purposes. 
+>   In the scene, there is a person standing in the back of a taxi van. The person appears to be folding or handling some clothes or material, possibly ironing, while the vehicle is moving down what seems to be a city street with traffic and other vehicles around. This activity could suggest that the person may be providing laundry services within the taxi van itself. It's an unusual sight and it looks like a promotional event or perhaps a creative way to offer a service where the car becomes a mobile laundry station. 
 
 
 ```python
@@ -119,12 +119,12 @@ Image(filename='./images/mustache.png')
 ```python
 print(llava_call("What color are her eyes?", "./images/mustache.png"))
 ```
-> The individual in the image has blue eyes. 
+> The person in the image has blue eyes. 
 
 ```python
 print(llava_call("What is the mustache made of?", "./images/mustache.png"))
 ```
->  The "mustache" in the image appears to be a banana, with the stem forming the outline and the flesh serving as the color. It's an interesting example of food photography that creatively presents a common fruit. 
+>  The "mustache" in the image is made from bananas, not actual hair. It's a playful, creative way to incorporate fruits as a part of a costume or statement. 
 
 ```python
 Image(filename='./images/pizza.png')
@@ -135,12 +135,12 @@ Image(filename='./images/pizza.png')
 ```python
 print(llava_call("How many slices of pizza are there?", "./images/pizza.png"))
 ```
->  The image shows a slice of pizza with toppings, but the number of slices is not visible in the photo. There is one slice that can be seen clearly, but the rest of the pizza is out of view or obscured by the top of the slice.
+>  There are eight slices of pizza on the plate. 
 
 ```python
 print(llava_call("Is this a vegetarian pizza?", "./images/pizza.png"))
 ```
->  The image you've provided appears to be a deep-dish pizza with several toppings. It has a layer of what looks like tomato sauce, cheese, meat that could be sausage or ground beef, and vegetables such as onions, olives, and possibly peppers. While the pizza contains vegetables, which are common in vegetarian pizzas, it also includes meat, which would not make it vegetarian according to traditional definitions of a vegetarian diet. 
+>  This pizza is not a vegetarian pizza. It appears to have meat on it, which makes it non-vegetarian. Specifically, the toppings include chunks of meat, suggesting that it is not suitable for those who follow a vegetarian diet. 
 
 ```python
 Image(filename='./images/tree.png')
@@ -151,13 +151,12 @@ Image(filename='./images/tree.png')
 ```python
 print(llava_call("Is this person expecting company?", "./images/tree.png"))
 ```
->  The image shows an individual sitting under a tree with a picnic spread out. There's food on the table, and it looks like it could be a pleasant outdoor setting for someone to join for a meal or conversation. However, there is no other person in sight, so the expectation of company might not be realized immediately. The setting appears inviting and relaxed, which might imply that the person is waiting for others to arrive. 
+>  Based on the image, it seems that the person is set up for a picnic, which usually suggests they are expecting company. There's food laid out and other items like cups and a frisbee, which could be used during social activities. However, there's only one person visible in the image. Without additional context, it's not possible to definitively determine if they are indeed expecting someone else or if this is just a solitary picnic setup.
 
 ```python
 print(llava_call("What is just under the tree?", "./images/tree.png"))
 ```
-> 
- Under the tree, there appears to be a person sitting on a bench or lying down on a picnic blanket with their feet up. There are also some items scattered around that look like personal belongings and possibly food or drinks for a picnic. 
+>  The image shows a person sitting on the ground near a picnic table, with what appears to be a sunny day and some personal items around. There's also a sports ball visible near the person. Under the tree, there are several bags that might contain belongings or food for the picnic. 
 
 ```python
 Image(filename='./images/eyesight.png')
@@ -168,12 +167,14 @@ Image(filename='./images/eyesight.png')
 ```python
 print(llava_call("Does it appear to be rainy?", "./images/eyesight.png"))
 ```
->  No, the image shows a clear and sunny day. The weather appears to be pleasant with no signs of rain in the image provided. 
+>  No, the image shows a sunny day with clear skies. The man is holding a banana up to his ear as if he's talking into it, which is not possible, suggesting a playful or humorous situation rather than any indication of rain.  
 
 ```python
 print(llava_call("Does this person have 20/20 vision?", "./images/eyesight.png"))
 ```
->  In the image, you've provided a person holding up what appears to be a banana. The person seems to be posing for a photo and is standing outdoors, likely on a hill or embankment given the slope of the ground beneath them. It's not possible to determine if someone has 20/20 vision just by looking at an image; that would require assessing their visual acuity in person. However, the individual appears to be focused and is holding up something that looks like a banana with care, which could suggest good vision or simply an interest in the item they're holding. 
+>   The image you've provided shows a person holding a banana up to their face, seemingly taking a picture or examining it. However, the image quality is quite low and blurry, making it difficult to discern any fine details of the person's eyesight, as they are not visible in this photo.  
+>  
+> To determine if someone has 20/20 vision, a thorough eye examination would be necessary to check for refractive errors such as nearsightedness or farsightedness, and to assess visual acuity by reading letters on an eye chart. The image does not provide sufficient detail to make any accurate assessment about the person's vision. 
 
 
 ## 3. 이미지 캡셔닝
@@ -218,8 +219,4 @@ Image(filename='./images/raccoon.jpg')
 ```python
 print(llava_call("Explain this image.", "./images/raccoon.jpg"))
 ```
->  The image shows a raccoon in an outdoor setting that appears to be a park or nature area, as suggested by the presence of trees and what looks like a path or trail. The raccoon is standing on all fours, looking forward, possibly searching for food or exploring its surroundings. It has typical raccoon features such as a bushy tail, a pointed ear, and a mask-like facial pattern with black patches around the eyes and ears.  
-> 
->  The background suggests a cooler climate due to the presence of fallen leaves on the ground, which might indicate that the photo was taken in autumn or winter. The raccoon's fur appears wet, which could suggest it has recently been exposed to water or is living in an area with damp conditions.  
->
->  This type of raccoon is common in North America and is known for its adaptability and intelligence. They are often found near human habitation as they can be opportunistic feeders, scavenging through garbage dumps or urban areas. 
+>   The image shows a raccoon standing on what appears to be the ground of a forest or wooded area. The raccoon is facing towards the left side of the frame, and it has a somewhat surprised or curious expression. It's walking in front of a small rock outcropping or embankment, which could indicate that it might be navigating an uneven path through its habitat. There are also some leaves on the ground, suggesting that the photo was taken during a time when trees shed their leaves, possibly autumn. The background is slightly blurred, but it looks like a natural environment with forest floor and some vegetation. 
