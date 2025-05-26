@@ -204,7 +204,5 @@ Image(filename='./images/raccoon.jpg')
 print(llava_call("Explain this image.", "./images/raccoon.jpg"))
 ```
 >  The image shows a raccoon in an outdoor setting that appears to be a park or nature area, as suggested by the presence of trees and what looks like a path or trail. The raccoon is standing on all fours, looking forward, possibly searching for food or exploring its surroundings. It has typical raccoon features such as a bushy tail, a pointed ear, and a mask-like facial pattern with black patches around the eyes and ears.
-
 The background suggests a cooler climate due to the presence of fallen leaves on the ground, which might indicate that the photo was taken in autumn or winter. The raccoon's fur appears wet, which could suggest it has recently been exposed to water or is living in an area with damp conditions.
-
 This type of raccoon is common in North America and is known for its adaptability and intelligence. They are often found near human habitation as they can be opportunistic feeders, scavenging through garbage dumps or urban areas. 
