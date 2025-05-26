@@ -76,7 +76,98 @@ conditioning으로 주는 매체(input)은 text 뿐만 아니라, Pose, 테이�
     - Seq2seq trainer
 
 2. Contrastive Learning Models
-- Contrastive Learning 을 활용하여 이미지와 텍스의 사이의 관계를 학습 
+- Contrastive Learning 을 활용하여 이미지와 텍스의 사이의 관계를 학습
+  - 이미지와 이에 대한 Caption을 비지도 학습을 통해 연결지으며 유사도를 최대화
+  - Positive Pair : 이미지와 이에 대한 올바른 설명
+  - Negative Pair : 무작위로 짝지어진, 관계없는 이미지와 설명
+- 시각적 데이터를 자연어 설명과 연결시키는데 자주 사용
+  - Text2Image 생성모델, Image Retrieval, VL-Classification등에서 사용
+ 
+
+---
+
+### 대조학습
+
+일반적인 Machin Learning 분류
+1. 비지도 학습
+   - 데이터만으로 모델을 학습 (비용이 매우 저렴)
+   - 정답이 없기 때문에 방법이 매우 모호하며 추상적
+   - 모델의 학습 방향을 제시하기 어려움 (보통 시각하여 정성적으로 분류)
+3. 지도 학습
+   - 데이터(X)와 이에 대한 레이블(y_true)를 제공
+   - 데이터를 통해 모델이 예측한 값(y_pred)과 정답 간 차이를 계산
+   - 차이가 수치화되므로 모델이 어느 방향으로 학습해야할 지 지시할 수 있음
+   - 그러나 지도학습 데이터를 만드는 것은 노동력, 비용, 시간이 많이 필요, 텍스트 데이터의 경우 사실상 불가능한 접근 방식
+4. 강화 학습 (Agent가 직접 Action을 수행하면서 Reward 보상을 최대화 할 것인가 하는 학습방식)
 
    
+#### SSL(Self-Sufperivsed Learning) (Repersentation Learning 방법 중에 하나)
+- 데이터를 레이블 없이 학습하는 방식의 일종 (비지도 학습)
+  - 별도로 데이터를 대한 레이블을 생성하지 않음
+- 그러나 모델이 데이터를 스스로 학습할 수 있도록 하는 기법
+- 일종의 Representation Learining
+- 마스킹을 사용하여 자체 데이터를 가지고 정답지와 문제지를 만들어 증강 학습 사용
+  - SSL에서 모델이 학습할 수 있도록 만들어진 가짜 목표(인위적인 과제)로 학습 진행
+  - 레이블이 없는 데이터로 모델을 학습할 수 있도록 데이터에 인위적인 변형을 부여
+  - 그 변형을 예측하거나 특정 문제를 해결하게 끔 유도 (BERT, MLM, NSP)
+- 목표가 구체화된 신호로 모델을 지도하는 별도의 학습과정 (fine-tuning)을 거침
+  -> 궁극적으로 Downstream task에서 좋은 성능을 낼수 있는 특징을 학습하는 것이 목표
+  - QA sentnece generation, medical object detection 등
+ 
+#### Representation Learning
+- 데이터에서 의미있는 표현(Representation)을 자동으로 학습하는 방식
+  - 작업을 수행하기 위한 특징만을 학습하지 않고 Task-agnostic 한 정보들을 추출하는 것이 목표
+  - 분류/탐지를 잘 수행하는 것이 아니라 이미지 자체를 잘 이해하고, 필수적인 정보를 포작하는 과정 (패턴 추출 등)
+- 고차원 데이터에서 저차원 벡터로 표현(mapping) 차원축소할 수 있어야 함.
+  - 고차원 상의 데이터에서 불필요한 부분을 제거하고, 필수적인 부분을 남겨 요약할 수 있어야 함.
+ 
+#### 대조학습
+- 비슷한 데이터 쌍은 임베딩 공간에서 가깝게, 다른 데이터 쌍은 멀게 학습하는 표현 학습(Represenation Learning) 방법 중에 하나
+- 이방식은 주로 라벨이 없는 데이터 학습에서 사용
 
+1. Instance discrimination
+   - 기준(Anchor) 데이터, 비슷한 데이터(Similar), 전혀다른 데이터(Dissimilar)가 주어졌을 때, 이들 간의 유사도를 학습하는 과정
+   - 즉 기준 데이터를 변형하여 서로 다른 표현들을 비교하며 학습
+   - Intra-class(클래스 내부) distance, inter-class(클래스간) distance 조정
+  
+   - 절차
+     - 주어진 데이터에서 기준 데이터를 설정
+     - 랜덤하게 변형 된 데이터인 Positive Pair 생성
+     - Negative piar 학습
+     - Positive pair는 가까운 거리로, Negative Pair는 먼 거리로 학습하며 특징을 추출
+
+
+#### SimCLR
+비지도 학습도 지도학습만큼 성능을 낼 수 있는 것을 확인한 의미있는 이론
+Augmentation(증강) -> Encoding(Resnet) -> projection(MLP = Linear + ReLU)
+
+- 증강에 사용되는 방법들
+  - Crop, resize, flip, color distort(drop), color distort(jitter), rotate, Cutout, Gaussian Noise, Gaussian Blur, Sobel filtering 등
+
+
+#### CLIP
+- 이미지와 텍스트를 같은 임베딩 공간에서 학습시켜, 이미지와 텍스트를 연결
+  - 이미지, 텍스트의 embedding vector에 대해 유사도를 계산
+  - 같은 pair라면 높은 유사도 값, 다른 pair라면 낮은 유사도 값을 갖도록 학습
+- 이미지와 텍스트에 대한 cross-entropy loss 계산
+- 이미지가 input되면, 유사도 계산
+- 유사도가 가장 큰 텍스트로 분류됨
+
+---
+
+## VQA
+
+### VQA(Visual Question Answering) 정의
+- 이미지나 영상을 입력 받아 자연어 질문에 답하는 AI 기술을 의미한다.
+- 컴퓨터 비전과 자연어 처리 기술의 융합을 통해 이루어진다.
+- 사용자는 텍스트 질문을 입력하고, AI가 이미지 속 정보를 분석해 답변을 추출한다.
+
+### VQA의 목표
+- 세밀한 인식 (fine-grained recognition)
+- 객체 탐지 (object detection)
+- 행동 인식 (activity recognition)
+- 지식 기반 추론 (knowledge base reasoning)
+- 상식 추론 (common sense reasoning)
+
+### LLAVA with VQA
+  
