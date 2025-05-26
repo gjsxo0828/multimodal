@@ -164,10 +164,91 @@ Augmentation(증강) -> Encoding(Resnet) -> projection(MLP = Linear + ReLU)
 
 ### VQA의 목표
 - 세밀한 인식 (fine-grained recognition)
+  - 이 피자는 어떤 종류의 치즈를 사용하였는가
 - 객체 탐지 (object detection)
+  - 이 사진에 자전거가 몇대 있나요
 - 행동 인식 (activity recognition)
+  - 이 남자는 울고 있나요?
 - 지식 기반 추론 (knowledge base reasoning)
+  - 이 피자는 채식주의자가 먹을 수 있나요?
 - 상식 추론 (common sense reasoning)
+  - 이 사람은 손님을 기다리고 있나요?
+  - 이 사람은 시력이 좋은가요?
 
 ### LLAVA with VQA
-  
+- Instruction Tuning
+  - Google의 FLAN(Finetuned Language Models are Zero-shot Learners) 논문에서 제안
+  - LLM 모델을 Instruction 데이터셋을 통해 fine-tuning을 진행하여 Zero-shot 성능을 높이는 방법론
+  - 방법론의 차이
+    - (A) Pretrain-finetune (BERT, T5)
+    - (B) Prompting (GPT3) : 모델의 파라미터를 수정하지 않고 지시사항을 정확하게하는 것으로 개선
+    - (C) Instruction Tuning (FLAN) : Pretrained model에  : Pair 짝을 통해 학습 ??
+  - Instruction Tuning에 Visual 적으로 푼 모델을 LLAVA라고 함
+- 기존 Multimodal model
+  - OepnFlamingo, LLaMA-Adapter : 오픈소스 LLaMA가 이미지 입력을 사용할 수 있도록 하여 multimodal LLM 구축
+  - promising task transfer 일반화 성능을 보임
+  - 일반적으로 Language-only task에 비해 multimodal task에서는 성능이 좋지 못함.
+  - CC, LAION 등의 기존 multimodal dataset은 단순한 image-text pair data
+  - multimodal instruction-followingdata 구축 필요
+    - 생성 프로셋 큰 시간 비용, human crowd sourcing 시 데이터가 잘 정의되지 않을 수 있어 ChatGPT/Language-only GPT4를 이용
+  - LLAVA dataset 구축
+    - symbolic representation 생성을 위해 COCO dataset을 참고해옴
+      - visual contetn가 포함된 instruction-following data 생성하기 위함
+      - Captions : 이미지에 대한 다양한 시각 개념 추출 및 설명
+      - Bounding boxes : 각 물체 및 개념들의 위치와 정보 설명
+      - Language-only GPT를 위해 image 자체를 input으로 사용하지 않음
+    - 3 types instruction following data
+      - instruction-following data 생성하기 위함
+      - COCO dataset 사용하여 생성
+      - Conversation, Detaield description, Complex reasoning 3가지 타입으로 생성
+      - 각 타입에 대해 사람이 직접 몇 개의 예시를 설계하여 사용
+        - 데이터 수집 과정 중 유일한 human annotation
+        - in-context learining에서 GPT4 쿼리를 주기 위한 seed example로 사용
+        - assistnat로 ChatGPT/GPT4로 실험해본 결과, GPT4가 더 좋은 품질의 data 생성함
+
+  #### 3 types instruction following data : Conversation
+  - assistnat가 이미지를 보고 인간의 질문에 답하는 듯한 어조로 답변
+  - 이미지의 시각적 내용들에 대하여 다양한 질문들이 제기됨
+  - 분명한 답변이 가능한 질문만 고려됨
+  - 58K 생성
+ 
+  #### 3 types instruction following data : Detailed Description
+  - 이미지에 대한 풍부하고 포괄적인 설명을 포함하기 위하여 질문 목록을 직접 작성
+  - 각 이미지마다 하나의 질문을 무작위로 골라서 GPT4로 물어보고 자세한 설명을 만들어 내도록 함
+  - 23K 생성
+
+   #### 3 types instruction following data : Complex Reasoning
+  - 상기 2가지 유형을 기반으로 심층적인 추론 질문 및 답변 생성
+  - 일반적으로 엄격한 논리를 따르는 단계별 추론 과정을 거침
+  - 77K 생성
+ 
+- LLAVA architecture (ViT 계열 모델)
+  ![image](https://github.com/user-attachments/assets/5cbed2d0-beb9-4d48-8da0-d1ba5305e4d3)
+
+  14*14 크기로 이미지를 slicing하여 patch화 하고, instruction은 "Vicuna" Language model을 사용하였음
+  image는 패치마다 벡터값이 생성되고, Instruction은 토큰마다 백터값이 생성됨. 2개를 단순 concat하여 입력데이터로 사용함
+
+- LLAVA dataset 구성
+  - 각 이미지 Xv에 대해서 T개의 multiturn conversation data
+  - t번째 instruction
+    ![image](https://github.com/user-attachments/assets/47622086-83ad-44d0-a991-7b3b1a916b33)
+
+- LLAVA Training (이전에 사용한 예측 학습모델을 누적해서 사용)
+  - auto-regressive training objective 사용
+  - L개의 sequence에 대한 Xa의 확률 계산
+    ![image](https://github.com/user-attachments/assets/367ce020-8021-41d9-a6f7-ad47c0cecfdf)
+
+- LLAVA 문제점
+  - 검색기능이 부족, 다국어적인 언어 해석 모델의 한계가 있음 -> 추론이나 검색 엔진을 추가하여 보완
+  - 브랜드 같이 정보를 특정하지 못함
+  - 이미지를 패치화 하다보니 정보의 유실이 발생하는 것 같다. -> 최근 논문에 의하면 이미지를 패치하지않고, 해상도를 auto-regressive 해서 학습을 시키는 것으로 사용
+ 
+ ### LLAVA를 다운스트림 태스크에 이용하기
+ - LLaVA-Med
+   - stage 1 : 의학 개념 훈련 (의학이미지, 캡션, 질문, 대답)
+   - stage 2 : 의학 지시 조정 데이터셋 (Instruction-tuning dataset)
+   - A100 8장 노드로 15시간 내에 훈련이 종료함.
+   - 훈련된 LLAVA-Med 모델을 여러 다운스트림 태스크에 응용이 가능함
+ - LLaVA를 이용한 숫자 인식 (별도 모델 제작 불필요)
+ - LLaVA를 이용한 동물 사진 인식 (이미지 분류)
+
