@@ -32,19 +32,26 @@ from IPython.display import Image
 ```python
 def image_to_base64str(image_path):
     with open(image_path, "rb") as image_file:
+    #img > rb(바이너리 읽기 0, 1) 모드로 load > image_file
         return base64.b64encode(image_file.read()).decode('utf-8')
+        # 이미지는 바이너리 데이터 형식인데, 그대로 전송하거나 저장하면 시스템 플랫폼에 따라 깨질 수 있음
+        # b64encode : Base64(아스키 코드)로 변환 (문자열로 바꿔서, HTML, JSON, HTTP 등 텍스트 기반 시스템에도 안전하게 전송할 수 있음)
+        #utf-8 : 전세계의 모든 문자를 컴퓨터가 이해할 수 이쓴 이진 데이터로 변환하는 가장 널리 쓰이는 문자 인코딩 방식
 ```
 
 LLaVA 모델은 ollama 프레임워크를 통해 구동되고 있습니다. 사용자의 질문을 전송하고, 모델의 응답을 보기 좋게 변환합니다.
 
 ```python
 def parse_response(response_text):
-    response_jsons = response_text.split("\n")
+    response_jsons = response_text.split("\n") #줄바꿈 마다 문자열 분해 > list
+    # 생성한 각 단어마다 json 형식으로 metadata(생성 모델, 날짜, 예측 종료 여부, 종료 이유 등) 도 함께 존재
     
     all_response = ""
     for response_json in response_jsons:
         try:
             all_response += json.loads(response_json)['response']
+            #jsong.loads(response_json)
+            #{'model': 'llava', 'created_At' : '2025-05-25T19:49:01.9232323', 'response': ' The', 'done': False}
         except:
             pass
         
@@ -53,19 +60,20 @@ def parse_response(response_text):
 
 ```python
 def llava_call(prompt, image_path):
-    url = "http://localhost:11434/api/generate"
-    payload = {
+    url = "http://localhost:11434/api/generate" #LLAVA 모델이 실행 중인 로컬 서버의 API 주소
+    payload = { #API에 전송할 데이터 딕셔너리
         "model": "llava",
         "prompt": prompt,
         "images": [image_to_base64str(image_path)]
+        #image_to_base64str : 이미지 파일을 Base64 문자열로 인코딩 > 리스트 (여러 img 처리 가능)
     }
 
-    headers = {
+    headers = { #HTTP(LLaVA 모델 서버(로컬에서 실행 중인 API)에게 요청할 헤더, JSON 형식임을 명시
         "Content-Type": "application/json"
     }
-
+    #HTTP POST(데이터 전송) 요청
     response = requests.post(url, data=json.dumps(payload), headers=headers)
-
+        #json.dumps : py dict > json
     return parse_response(response.text)
 ```
 
@@ -176,11 +184,17 @@ print(llava_call("Does this person have 20/20 vision?", "./images/eyesight.png")
 def download_image(url, save_path):
     try:
         response = requests.get(url, stream=True)
+        # 이미지를 한번에 모두 메모리에 올리지 않고, 청크 단위로 스트리밍하여 메모리 효율이 높음
         response.raise_for_status()
+        # HTTP 오류 발생 시 예외를 발생시켜 아래 코드 실행을 중단하고 except로 이동
         os.makedirs(os.path.dirname(save_path), exist_ok=True)
+        # makedirs : 저장 경로의 상위 폴더가 없으면 자동으로 생성
+        # exit_ok = True : 근데 이미 폴더가 있었다면 에러가 없이 넘어감
         with open(save_path, 'wb') as file:
-            for chunk in response.iter_content(chunk_size=8192):
-                file.write(chunk)
+            # wb 모드 : 바이너리로 파일을 저장(이미지, 오디오 등은 반드시 바이너리 모드 필요)
+            for chunk in response.iter_content(chunk_size=8192): # 바이트 단위
+                # iter_content : 요청/응답 데이터를 반복하여 대용량 응답을 위해 conetnet를 청크단위로 읽음
+                file.write(chunk) # 읽어온 청크 단위 파일 저장
         
         print("다운로드가 완료되었습니다.")
     except requests.RequestException as e:
@@ -193,7 +207,7 @@ download_image(
     "./images/raccoon.jpg"
 )
 ```
-> 다운로드 실패: 403 Client Error: Forbidden. Please comply with the User-Agent policy: https://meta.wikimedia.org/wiki/User-Agent_policy for url: https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Raccoon_in_Central_Park_%2835264%29.jpg/440px-Raccoon_in_Central_Park_%2835264%29.jpg
+
 
 ```python
 Image(filename='./images/raccoon.jpg')
