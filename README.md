@@ -41,6 +41,9 @@ https://samsung-ai.elice.io
    - 보통 LLM 서비스 과금 방식은 Toekn 단위로 됨
 3. 토큰화된 텍스트 데이터를 임베딩 모델을 통해 벡터화된 데이터로 변환함
    - 비슷한 의미를 가진 텍스트는 수학적으로 비슷한 벡터를 가지며 단어 문장이 가지고 있는 정보, 의미를 벡터 연산을 통해 더하고 뺄 수 있다.
+
+  ![image](https://github.com/user-attachments/assets/14b478ad-c3cd-4e3e-abf0-68941e4fa0b1)
+
   
 ### 멀티모달 예시(CLIP)
 1. CLIP (Contrastive Lanaguage-Image Pretraining)은 OpenAI에서 개발한 이미지-텍스트 멀티모달 모델이다.
@@ -48,11 +51,15 @@ https://samsung-ai.elice.io
 2. CLIP은 대조 학습 (Contrastive Learining) 방식을 이용해 이미지와 텍스트를 연결한다.
 3. CLIP 모델을 할용한 다른 모델인 LAVVA 도 있다.
 
+![image](https://github.com/user-attachments/assets/60f8a87b-852b-4695-bb3b-6515f793850e)
+
+
 ### Diffusion Model
 학습과정 : 원본이미지에 노이즈를 추가하며 학습, 다시 노이즈를 제거하여 학습(디노이징)
 사용과정 : 노이즈만 생성한 이미지에 text 정보를 받아서 노이즈를 제거하면서 이미지를 추론하여 생성하는 과정을 진행함 
 conditioning으로 주는 매체(input)은 text 뿐만 아니라, Pose, 테이블, 범주형 등 다양한 포맷이 가능함.
 
+![image](https://github.com/user-attachments/assets/42e1409b-1c18-466b-bf80-bdd518bc36f3)
 
 ---
 
@@ -63,6 +70,13 @@ conditioning으로 주는 매체(input)은 text 뿐만 아니라, Pose, 테이�
   - 텍스트, 이미지, 음성, 비디오 등 서로 다른 감각 기반의 데이터 
   - 동일한 감각 기관으로 인지된다 하더라도, 관찰 및 수집 방식이 다를 경우 다른 Modality로 간주
 - Text-to-image gengeration, VQA(Visual Question-Answering), Image Captioning, VCR(Visual Commonsense Reasoning)
+
+![image](https://github.com/user-attachments/assets/aaaac46e-e75b-435a-815d-86f1246b9908)
+
+![image](https://github.com/user-attachments/assets/4dbdcea1-0d64-4416-a584-c6c87b8d92b4)
+
+
+
 
 ### 멀티모달을 활용한 모델 종류들 
 1. Enc-Dec Models
@@ -96,12 +110,14 @@ conditioning으로 주는 매체(input)은 text 뿐만 아니라, Pose, 테이�
    - 데이터만으로 모델을 학습 (비용이 매우 저렴)
    - 정답이 없기 때문에 방법이 매우 모호하며 추상적
    - 모델의 학습 방향을 제시하기 어려움 (보통 시각하여 정성적으로 분류)
-3. 지도 학습
+2. 지도 학습
    - 데이터(X)와 이에 대한 레이블(y_true)를 제공
    - 데이터를 통해 모델이 예측한 값(y_pred)과 정답 간 차이를 계산
    - 차이가 수치화되므로 모델이 어느 방향으로 학습해야할 지 지시할 수 있음
    - 그러나 지도학습 데이터를 만드는 것은 노동력, 비용, 시간이 많이 필요, 텍스트 데이터의 경우 사실상 불가능한 접근 방식
-4. 강화 학습 (Agent가 직접 Action을 수행하면서 Reward 보상을 최대화 할 것인가 하는 학습방식)
+3. 강화 학습 (Agent가 직접 Action을 수행하면서 Reward 보상을 최대화 할 것인가 하는 학습방식)
+
+![image](https://github.com/user-attachments/assets/a45813fe-f196-40f5-af9a-a604dc3e646e)
 
    
 #### SSL(Self-Sufperivsed Learning) (Repersentation Learning 방법 중에 하나)
@@ -124,6 +140,9 @@ conditioning으로 주는 매체(input)은 text 뿐만 아니라, Pose, 테이�
 - 고차원 데이터에서 저차원 벡터로 표현(mapping) 차원축소할 수 있어야 함.
   - 고차원 상의 데이터에서 불필요한 부분을 제거하고, 필수적인 부분을 남겨 요약할 수 있어야 함.
  
+![image](https://github.com/user-attachments/assets/308ad75f-a5b8-45f4-8a8e-161021370044)
+
+ 
 #### 대조학습
 - 비슷한 데이터 쌍은 임베딩 공간에서 가깝게, 다른 데이터 쌍은 멀게 학습하는 표현 학습(Represenation Learning) 방법 중에 하나
 - 이방식은 주로 라벨이 없는 데이터 학습에서 사용
@@ -138,14 +157,19 @@ conditioning으로 주는 매체(input)은 text 뿐만 아니라, Pose, 테이�
      - 랜덤하게 변형 된 데이터인 Positive Pair 생성
      - Negative piar 학습
      - Positive pair는 가까운 거리로, Negative Pair는 먼 거리로 학습하며 특징을 추출
+![image](https://github.com/user-attachments/assets/0100e5d6-f245-48b1-b7ae-a63e0de9eb74)
 
 
 #### SimCLR
 비지도 학습도 지도학습만큼 성능을 낼 수 있는 것을 확인한 의미있는 이론
 Augmentation(증강) -> Encoding(Resnet) -> projection(MLP = Linear + ReLU)
 
+![image](https://github.com/user-attachments/assets/6407515e-8e7c-4973-9db9-2e0b239512f7)
+
+
 - 증강에 사용되는 방법들
   - Crop, resize, flip, color distort(drop), color distort(jitter), rotate, Cutout, Gaussian Noise, Gaussian Blur, Sobel filtering 등
+![image](https://github.com/user-attachments/assets/789ee40f-abab-4db9-a0f5-f98c5f036546)
 
 
 #### CLIP
@@ -155,6 +179,8 @@ Augmentation(증강) -> Encoding(Resnet) -> projection(MLP = Linear + ReLU)
 - 이미지와 텍스트에 대한 cross-entropy loss 계산
 - 이미지가 input되면, 유사도 계산
 - 유사도가 가장 큰 텍스트로 분류됨
+- ImageNet ResNet101 보다 더 좋은 성능을 보임
+![image](https://github.com/user-attachments/assets/d4130b77-ecaf-4e04-b2b8-3bc284068fd9)
 
 ---
 
@@ -186,20 +212,29 @@ Augmentation(증강) -> Encoding(Resnet) -> projection(MLP = Linear + ReLU)
     - (A) Pretrain-finetune (BERT, T5)
     - (B) Prompting (GPT3) : 모델의 파라미터를 수정하지 않고 지시사항을 정확하게하는 것으로 개선
     - (C) Instruction Tuning (FLAN) : Pretrained model에  : Pair 짝을 통해 학습 ??
+![image](https://github.com/user-attachments/assets/c110934e-37d0-44d5-a6b7-b39ce2a128c4)
+
   - Instruction Tuning에 Visual 적으로 푼 모델을 LLAVA라고 함
 - 기존 Multimodal model
   - OepnFlamingo, LLaMA-Adapter : 오픈소스 LLaMA가 이미지 입력을 사용할 수 있도록 하여 multimodal LLM 구축
   - promising task transfer 일반화 성능을 보임
   - 일반적으로 Language-only task에 비해 multimodal task에서는 성능이 좋지 못함.
+  
   - CC, LAION 등의 기존 multimodal dataset은 단순한 image-text pair data
   - multimodal instruction-followingdata 구축 필요
     - 생성 프로셋 큰 시간 비용, human crowd sourcing 시 데이터가 잘 정의되지 않을 수 있어 ChatGPT/Language-only GPT4를 이용
+![image](https://github.com/user-attachments/assets/be261513-3899-4fe0-a2de-503a0096041f)
+ 
+      
   - LLAVA dataset 구축
     - symbolic representation 생성을 위해 COCO dataset을 참고해옴
       - visual contetn가 포함된 instruction-following data 생성하기 위함
       - Captions : 이미지에 대한 다양한 시각 개념 추출 및 설명
       - Bounding boxes : 각 물체 및 개념들의 위치와 정보 설명
       - Language-only GPT를 위해 image 자체를 input으로 사용하지 않음
+  ![image](https://github.com/user-attachments/assets/eeba18c1-deeb-4fa1-a9e9-4901b9afd15f)
+   
+    
     - 3 types instruction following data
       - instruction-following data 생성하기 위함
       - COCO dataset 사용하여 생성
@@ -214,16 +249,22 @@ Augmentation(증강) -> Encoding(Resnet) -> projection(MLP = Linear + ReLU)
   - 이미지의 시각적 내용들에 대하여 다양한 질문들이 제기됨
   - 분명한 답변이 가능한 질문만 고려됨
   - 58K 생성
+  ![image](https://github.com/user-attachments/assets/f7bcbb6e-c308-4306-a109-c0d4485bcb86)
+
  
   #### 3 types instruction following data : Detailed Description
   - 이미지에 대한 풍부하고 포괄적인 설명을 포함하기 위하여 질문 목록을 직접 작성
   - 각 이미지마다 하나의 질문을 무작위로 골라서 GPT4로 물어보고 자세한 설명을 만들어 내도록 함
   - 23K 생성
+  ![image](https://github.com/user-attachments/assets/ec13fa22-7f01-4071-a6fc-76eb353b6162)
+
 
    #### 3 types instruction following data : Complex Reasoning
   - 상기 2가지 유형을 기반으로 심층적인 추론 질문 및 답변 생성
   - 일반적으로 엄격한 논리를 따르는 단계별 추론 과정을 거침
   - 77K 생성
+  ![image](https://github.com/user-attachments/assets/12c9d5c7-68f8-41b5-8b00-4462dae750be)
+
  
 - LLAVA architecture (ViT 계열 모델)  
   ![image](https://github.com/user-attachments/assets/5cbed2d0-beb9-4d48-8da0-d1ba5305e4d3)
