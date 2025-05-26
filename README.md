@@ -1,6 +1,6 @@
 # multimodal
 
-### 멀티모달 챗봇 개요
+## 멀티모달 챗봇 개요
 
 1. 멀티모달이란
   - 한 매체에 여러 형식의 정보(multiple literacies)를 적용한 경우를 말한다.
@@ -49,6 +49,34 @@
 학습과정 : 원본이미지에 노이즈를 추가하며 학습, 다시 노이즈를 제거하여 학습(디노이징)
 사용과정 : 노이즈만 생성한 이미지에 text 정보를 받아서 노이즈를 제거하면서 이미지를 추론하여 생성하는 과정을 진행함 
 conditioning으로 주는 매체(input)은 text 뿐만 아니라, Pose, 테이블, 범주형 등 다양한 포맷이 가능함.
+
+
+---
+
+## 멀티모달
+- Multimodal tasks
+  - 여러 종류 modality를 동시에 처리하거나 통합하여 문제를 해결하는 작업
+- Modality : 데이터의 성격에 의해 결정되는 서로 다른 유형
+  - 텍스트, 이미지, 음성, 비디오 등 서로 다른 감각 기반의 데이터 
+  - 동일한 감각 기관으로 인지된다 하더라도, 관찰 및 수집 방식이 다를 경우 다른 Modality로 간주
+- Text-to-image gengeration, VQA(Visual Question-Answering), Image Captioning, VCR(Visual Commonsense Reasoning)
+
+### 멀티모달을 활용한 모델 종류들 
+1. Enc-Dec Models
+- 이미지를 처리하는 encoder와, 텍스트 생성 기능을 담당하는 Decoder로 구성
+  - Encoder
+    - 이미지에 대한 표현을 벡터로 변환
+    - CNN 기반의 Encoder를 사용할 경우 Feature map을 Self-attention 기반의 Encoder를 사용할 경우 Patch embedding (작은 크기로 이미지를 분할하여 벡터화)을 계산
+  - Decoder
+    - Encoder에서 생성된 데이터를 전달받아 Text 생성 시 참조
+    - 텍스트 생성 과정은 일반적인 Transformer decoder 활용
+    - Decoder에 입력된 텍스트는 Query, Encdoer에서 출력된 벡터는 Key와 Value로 사용되어 Cross-attention 연산을 수행함
+  - 관련 모델 (Image Captioning, VLN, VCR 등 활용)
+    - Vision Encoder Decoder Models
+    - Seq2seq trainer
+
+2. Contrastive Learning Models
+- Contrastive Learning 을 활용하여 이미지와 텍스의 사이의 관계를 학습 
 
    
 
