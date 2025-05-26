@@ -72,10 +72,13 @@ data_csv.drop(axis=1, inplace=True, columns=['id'])
 data_csv.sort_values(by='image_id', inplace=True)
 data_csv.head()
 ```
+![image](https://github.com/user-attachments/assets/b742319a-428e-4dab-bdf4-31b02e9df2c3)
+
 
 ```python
 len(data_csv['image_id'].unique())
 ```
+> 18783
 
 ```python
 image_path_pattern = "/mnt/elice/dataset/Images/COCO_train2014_{:012d}.jpg"
@@ -97,6 +100,7 @@ val_csv = data_csv[data_csv['image_id'].isin(val_ids)]
 # 학습 데이터와 검증 데이터의 크기(행 개수)를 출력
 print(train_csv.shape, val_csv.shape)
 ```
+> (25008, 3) (5001, 3)
 
 ### 기타 함수 및 클래스
 
@@ -205,6 +209,7 @@ val_dataset = CLIPDataset(df=val_csv,
 
 print(f"Train: {len(train_dataset)} - Validation: {len(val_dataset)}")
 ```
+> Train: 25008 - Validation: 5001
 
 ```python
 train_dataset[0]
@@ -227,6 +232,238 @@ val_dataloader = torch.utils.data.DataLoader(val_dataset,
 batch = next(iter(train_dataloader))
 batch
 ```
+```
+{'input_ids': tensor([[ 101, 1037, 2158,  ...,    0,    0,    0],
+         [ 101, 1037, 2711,  ...,    0,    0,    0],
+         [ 101, 2045, 2024,  ...,    0,    0,    0],
+         ...,
+         [ 101, 2048, 2111,  ...,    0,    0,    0],
+         [ 101, 1037, 2317,  ...,    0,    0,    0],
+         [ 101, 1037, 3345,  ...,    0,    0,    0]]),
+ 'attention_mask': tensor([[1, 1, 1,  ..., 0, 0, 0],
+         [1, 1, 1,  ..., 0, 0, 0],
+         [1, 1, 1,  ..., 0, 0, 0],
+         ...,
+         [1, 1, 1,  ..., 0, 0, 0],
+         [1, 1, 1,  ..., 0, 0, 0],
+         [1, 1, 1,  ..., 0, 0, 0]]),
+ 'image': tensor([[[[-1.9980, -1.9980, -1.9809,  ..., -1.7412, -1.9124, -1.8610],
+           [-1.9980, -1.9809, -1.9638,  ..., -1.8097, -1.7925, -1.8782],
+           [-1.9980, -1.9809, -1.9467,  ..., -1.6898, -1.9124, -1.7754],
+           ...,
+           [-2.0837, -2.0837, -2.1008,  ..., -2.0837, -2.0837, -2.0837],
+           [-2.0837, -2.0837, -2.1008,  ..., -2.0837, -2.0837, -2.0837],
+           [-2.0837, -2.1008, -2.0837,  ..., -2.1008, -2.1008, -2.1008]],
+ 
+          [[-1.9132, -1.9132, -1.8957,  ..., -1.6155, -1.7906, -1.7381],
+           [-1.9132, -1.8957, -1.8782,  ..., -1.6856, -1.6681, -1.7381],
+           [-1.9132, -1.8957, -1.8606,  ..., -1.5630, -1.7906, -1.6506],
+           ...,
+           [-2.0007, -2.0007, -2.0182,  ..., -2.0007, -2.0007, -2.0007],
+           [-2.0007, -2.0007, -2.0182,  ..., -2.0007, -2.0007, -2.0007],
+           [-2.0007, -2.0182, -2.0007,  ..., -2.0182, -2.0182, -2.0182]],
+ 
+          [[-1.6824, -1.6824, -1.6650,  ..., -1.4036, -1.5779, -1.5256],
+           [-1.6824, -1.6650, -1.6476,  ..., -1.4733, -1.4559, -1.5256],
+           [-1.6824, -1.6650, -1.6302,  ..., -1.3513, -1.5779, -1.4384],
+           ...,
+           [-1.7696, -1.7696, -1.7870,  ..., -1.7696, -1.7696, -1.7696],
+           [-1.7696, -1.7696, -1.7870,  ..., -1.7696, -1.7696, -1.7696],
+           [-1.7696, -1.7870, -1.7696,  ..., -1.7870, -1.7870, -1.7870]]],
+ 
+ 
+         [[[ 0.4337,  0.5022,  0.4337,  ...,  0.7419,  0.7762,  0.8276],
+           [ 0.4166,  0.4851,  0.4508,  ...,  0.6906,  0.7591,  0.8104],
+           [ 0.3652,  0.4508,  0.3652,  ...,  0.7591,  0.8104,  0.7933],
+           ...,
+           [-1.0219, -1.0219, -0.9363,  ..., -0.6623, -0.8164, -0.8507],
+           [-0.8164, -0.7822, -0.7650,  ..., -0.8335, -0.7650, -0.5082],
+           [-0.6623, -0.6965, -0.5938,  ..., -0.6623, -0.7822, -0.4911]],
+ 
+          [[ 0.7304,  0.8004,  0.7304,  ...,  0.9580,  1.0105,  1.0455],
+           [ 0.7129,  0.7829,  0.7479,  ...,  0.9055,  0.9755,  1.0280],
+           [ 0.6429,  0.7304,  0.6604,  ...,  0.9755,  1.0280,  1.0105],
+           ...,
+           [-1.4055, -1.3529, -1.3179,  ..., -0.9153, -1.0728, -1.0203],
+           [-1.2829, -1.1779, -1.1779,  ..., -1.0728, -1.0203, -0.6877],
+           [-1.2129, -1.1429, -1.0028,  ..., -0.9153, -1.0378, -0.6702]],
+ 
+          [[ 1.2457,  1.3154,  1.2457,  ...,  1.3851,  1.4200,  1.4722],
+           [ 1.2282,  1.2980,  1.2631,  ...,  1.3502,  1.4025,  1.4548],
+           [ 1.1934,  1.2805,  1.2108,  ...,  1.4025,  1.4374,  1.4374],
+           ...,
+           [-1.2990, -1.1944, -1.1073,  ..., -0.5670, -0.7238, -0.7064],
+           [-1.1596, -0.9853, -0.9504,  ..., -0.7413, -0.6715, -0.3578],
+           [-1.0550, -0.9330, -0.7761,  ..., -0.5670, -0.6890, -0.3404]]],
+ 
+ 
+         [[[ 1.6324,  0.6906,  0.0227,  ..., -0.0972, -0.1486, -0.1486],
+           [ 1.6667,  0.9303,  0.8789,  ..., -0.0116, -0.1657, -0.1486],
+           [ 1.5982,  1.0673,  1.5125,  ...,  0.0569, -0.1999, -0.1657],
+           ...,
+           [-0.5596, -0.6794, -1.4158,  ..., -1.3130, -1.2959, -1.3302],
+           [-0.4054, -0.6965, -0.8507,  ..., -1.2959, -1.2788, -1.2274],
+           [ 0.3481,  0.3481,  0.0056,  ..., -1.3815, -1.3644, -1.2959]],
+ 
+          [[ 1.7633,  1.2731,  0.7479,  ..., -0.3025, -0.3725, -0.4601],
+           [ 1.7983,  1.4482,  1.4132,  ..., -0.3025, -0.3725, -0.4601],
+           [ 1.7458,  1.5007,  1.7108,  ..., -0.2675, -0.4951, -0.4601],
+           ...,
+           [-0.7577, -0.8452, -1.2479,  ..., -1.3880, -1.3529, -1.4230],
+           [-0.5826, -0.4601, -0.4251,  ..., -1.3704, -1.3529, -1.3529],
+           [ 0.7129,  0.7654,  0.4503,  ..., -1.4580, -1.4405, -1.3704]],
+ 
+          [[ 1.9428,  1.3851,  1.0888,  ..., -0.5147, -0.5844, -0.6018],
+           [ 2.0300,  1.5768,  1.9428,  ..., -0.4275, -0.5844, -0.6367],
+           [ 1.9428,  1.7511,  1.9951,  ..., -0.4101, -0.6890, -0.6541],
+           ...,
+           [-0.8633, -1.0550, -1.3687,  ..., -1.3339, -1.3164, -1.3687],
+           [-0.6367, -0.6541, -0.4798,  ..., -1.2816, -1.2816, -1.2816],
+           [ 0.8797,  0.8622,  0.5659,  ..., -1.3861, -1.3687, -1.2990]]],
+ 
+ 
+         ...,
+ 
+ 
+         [[[-0.7822, -0.8335, -0.6965,  ...,  0.2796,  0.1426, -0.0801],
+           [-0.7650, -0.7137, -0.6794,  ..., -0.3712, -0.3369, -0.4226],
+           [-0.6965, -0.7308, -0.7479,  ..., -0.5767, -0.4911, -0.5938],
+           ...,
+           [-1.3302, -1.3130, -1.3130,  ..., -1.9124, -1.9295, -1.9638],
+           [-1.2788, -1.3987, -1.3302,  ..., -1.9295, -1.9809, -2.0152],
+           [-1.3987, -1.3815, -1.4158,  ..., -1.9467, -1.9980, -2.0494]],
+ 
+          [[-0.7402, -0.6877, -0.6527,  ...,  0.6078,  0.4853,  0.3627],
+           [-0.6527, -0.7052, -0.7052,  ..., -0.2500, -0.3025, -0.2675],
+           [-0.5826, -0.6702, -0.6352,  ..., -0.4251, -0.4776, -0.4601],
+           ...,
+           [-1.2129, -1.1954, -1.2129,  ..., -1.8256, -1.8431, -1.9132],
+           [-1.1604, -1.2829, -1.2304,  ..., -1.8606, -1.8957, -1.9132],
+           [-1.2829, -1.2304, -1.2829,  ..., -1.8606, -1.9132, -1.9482]],
+ 
+          [[-0.8284, -0.9330, -0.8807,  ...,  0.2696,  0.1651,  0.1302],
+           [-0.7761, -0.7936, -0.8458,  ..., -0.3753, -0.2707, -0.3753],
+           [-0.7587, -0.7936, -0.7936,  ..., -0.5321, -0.4275, -0.7064],
+           ...,
+           [-1.1073, -1.1073, -0.9853,  ..., -1.5604, -1.6127, -1.6476],
+           [-1.0201, -1.1596, -1.0027,  ..., -1.5430, -1.6302, -1.6999],
+           [-1.1944, -1.1421, -1.1421,  ..., -1.6302, -1.6476, -1.6650]]],
+ 
+ 
+         [[[ 1.0331,  1.0673,  0.9303,  ...,  1.3584,  1.1872,  1.3413],
+           [ 0.7933,  1.0502,  1.0673,  ...,  1.4098,  1.5468,  1.2385],
+           [ 0.8104,  0.6734,  0.7762,  ...,  1.3070,  1.3070,  1.5297],
+           ...,
+           [ 1.1187,  1.1700,  1.1872,  ..., -0.2171, -0.1143,  0.3823],
+           [ 1.1872,  1.2214,  1.2557,  ..., -0.0458, -0.3883, -0.3541],
+           [ 1.1529,  1.4098,  1.4612,  ..., -0.3027, -0.5082, -0.4054]],
+ 
+          [[ 0.9055,  1.0105,  0.8880,  ...,  0.3803,  0.2227,  0.3978],
+           [ 0.5028,  0.8880,  0.9755,  ...,  0.1877,  0.0476,  0.0126],
+           [ 0.7829,  0.8529,  0.8529,  ...,  0.4153,  0.0651,  0.2227],
+           ...,
+           [ 1.1155,  1.1155,  0.9580,  ..., -1.0728, -1.1078, -1.0028],
+           [ 0.8704,  1.0105,  1.2206,  ..., -1.1954, -1.2479, -1.2129],
+           [ 1.2381,  1.2381,  1.0980,  ..., -1.3179, -1.1779, -1.1078]],
+ 
+          [[-0.5495, -1.1770, -1.5779,  ..., -1.1247, -1.2293, -1.4036],
+           [-0.6193, -0.2010, -0.8458,  ..., -1.4907, -1.7173, -1.5779],
+           [-0.1661, -0.2707, -0.1835,  ..., -1.6302, -1.7173, -1.3861],
+           ...,
+           [ 0.9494,  0.7054,  0.7925,  ..., -1.6824, -1.7347, -1.6302],
+           [ 0.5834,  0.6879,  0.8797,  ..., -1.7347, -1.7522, -1.7696],
+           [ 1.1934,  0.9319,  1.0888,  ..., -1.6999, -1.6999, -1.6999]]],
+ 
+ 
+         [[[ 2.2318,  2.2147,  2.2147,  ...,  0.0056,  0.0569, -1.7583],
+           [ 2.2318,  2.1290,  2.2147,  ...,  0.0912,  0.0398, -1.1589],
+           [ 0.5707,  1.7523,  2.2318,  ...,  0.0912,  0.0569, -0.5253],
+           ...,
+           [ 0.4508, -0.3027, -0.1143,  ..., -1.0733, -1.0219, -1.5185],
+           [-0.2684, -0.3198,  0.0741,  ..., -0.9705, -0.9705, -1.5014],
+           [-0.2856, -0.5082,  0.1083,  ..., -1.2959, -1.4329, -1.4672]],
+ 
+          [[ 2.4111,  2.4286,  2.3936,  ...,  0.3627,  0.3102, -1.9832],
+           [ 2.4111,  2.3585,  2.4286,  ...,  0.4328,  0.3627, -1.5805],
+           [ 1.0980,  2.1134,  2.3761,  ...,  0.4678,  0.4328, -0.9853],
+           ...,
+           [ 0.3627, -0.0574, -0.1450,  ..., -1.0203, -0.9503, -1.4230],
+           [-0.1975, -0.1625, -0.0049,  ..., -0.8978, -0.8627, -1.3880],
+           [-0.1275, -0.4076, -0.0574,  ..., -1.2829, -1.3354, -1.3004]],
+ 
+          [[ 2.6226,  2.6226,  2.6051,  ...,  0.3045,  0.2696, -1.6650],
+           [ 2.6226,  2.5529,  2.5354,  ...,  0.3568,  0.3393, -1.4210],
+           [ 1.3851,  2.3611,  2.6051,  ...,  0.3742,  0.3916, -0.9678],
+           ...,
+           [ 0.3742,  0.1128, -0.0615,  ..., -1.0724, -0.9504, -1.2641],
+           [-0.1661, -0.0267, -0.0267,  ..., -0.9330, -0.7761, -1.1596],
+           [-0.0441, -0.2358,  0.1651,  ..., -1.2467, -1.2293, -1.1421]]]]),
+ 'caption': ['A man with a wristband is smiling while talking on a cell phone.',
+  'A person airborne with a snowboard that is vertical.',
+  'THERE ARE A LOT OF FRIENDS SITTING AROUND A TABLE ',
+  'A red one door refrigerator in the corner of a tiled room.',
+  'A picture of a bee is next to a bunch of bananas.',
+  'A cake covered in globs of frosting on a table.',
+  'A boy with a surfboard points at something, while the people around him look where he is pointing. ',
+  'a lady that is skiing across a body of water',
+  'A white bowl filled with cereal and banana slices.',
+  'A person is sitting in a chair and a bird is on the ground. ',
+  'Sign for gas pump in front of a large building.',
+  'there is a large kite that is on the beach',
+  'there is a person sitting and licking their fingers',
+  'A boy who has just thrown a purple frisbee',
+  'One sheep running through the shrub brush of a field.',
+  'An uncooked pizza sits on top of a stove.',
+  'A group of bananas that are sitting in a tree.',
+  'Two giraffes stand by a post at a feeding station.',
+  'Two giraffes eating leaves from a barren tree',
+  'a large long kitchen that has a stove and some cabits',
+  'A computer next to a cup of black stuff',
+  'A cell phone broken into multiple pieces in the street.',
+  'Two zebras grazing in grass near one another.',
+  'A person with a striped shirt is sitting in a dimly lit room.',
+  'A pair of scissors sitting on a red yarn roll.',
+  'People flying a kite at the beach .',
+  'A man flying through the air while riding a skateboard.',
+  'A man standing in the doorway of a bus traveling down the road',
+  'Some vegetables and a knife on a cutting board.',
+  'A small group of people seated at a table with food.',
+  'a couple of horses are running down a hill',
+  'Two antique vases are set next to each other on a table.',
+  'A food entree with a salad is served in a dish.',
+  'A toilet sitting in a bathroom next to a wall under construction.',
+  'A large lot with motorcycles parked and lined up along the edge of the lot and various people next to the motorcycles.',
+  'A large jetliner sitting on top of an airport tarmac.',
+  'Two zebra standing on a tree covered park.',
+  'This is a red building with a giant clock in the center.',
+  'A person wearing a red beanie and a yellow and red scarf.',
+  'a horse that is walking on a ground',
+  'A sign directing people by arrow to the nearest police station. ',
+  'A baseball player who is holding his glove with his right hand.',
+  'A woman holding a tennis racket in her hand.',
+  'a street sign for masonic on a city street',
+  'A stop sign at the corner of the road.',
+  'A bunch of bananas are growing on a tree.',
+  'Two men walking on the beach with their surfboards. ',
+  'A man swinging a tennis racquet on top of a court.',
+  'a sandwich with some veggies and an egg in it ',
+  'A couple of women holding up smart phones in their hands.',
+  'different images of a clock on a wall.',
+  'A group of people standing around animals and small buildings.',
+  'a person sanding with a keyboard on his neck',
+  'A pan sitting on a table that has a cooked pizza on it. ',
+  'A very big blue shiny garbage truck on the road.',
+  'A bathroom with many brown fixtures and brown floors',
+  'Two plates on a tray of fuzzy looking food.',
+  'A clock tower is on the ground behind a fence.',
+  'A city with people walking and riding on chariots.',
+  'Some hooks on a wall holding some thongs, scissors, and keys.',
+  'A smiling man that has long dread locks in his hair.',
+  'Two people carrying two huge stuffed animals on their backs.',
+  'a white plate with two different donuts and a jar',
+  'A train in a subway that has a few passengers.']}
+```
+
 
 ## Model
 CLIP 모델은 아래 세 부분으로 구성
@@ -408,6 +645,8 @@ dummy_embeddings = torch.randn(CFG.batch_size, CFG.text_embedding)
 out = dummy_embeddings @ dummy_embeddings.mT
 print(F.softmax(out, dim=-1))
 ```
+![image](https://github.com/user-attachments/assets/57254e4d-c734-4ecc-8a29-c2b34a91bc9a)
+
 
 ## Training
 
@@ -524,6 +763,8 @@ for epoch in range(CFG.epochs):
 
     lr_scheduler.step(valid_loss.avg)
 ```
+![image](https://github.com/user-attachments/assets/0a0678b3-c4b5-47c5-8609-b14466bfc3be)
+
 
 ## Inference
 
@@ -562,6 +803,7 @@ def get_image_embeddings(dataloader, model_path):
 ```python
 model, image_embeddings = get_image_embeddings(val_dataloader, "best.pt")
 ```
+![image](https://github.com/user-attachments/assets/e947345e-56c4-44f4-bb9c-d98899337f3e)
 
 ### Query에 맞는 Image embedding 회수하기
 
@@ -617,6 +859,8 @@ find_matches(model,
              image_filenames=val_csv['image_path'].values,
              n=9)
 ```
+![image](https://github.com/user-attachments/assets/aa47773c-e109-476d-a1e4-fa6691787238)
+
 
 ```python
 find_matches(model, 
@@ -625,3 +869,5 @@ find_matches(model,
              image_filenames=val_csv['image_path'].values,
              n=9)
 ```
+![image](https://github.com/user-attachments/assets/1b8b4489-a3d6-42e1-8bcd-d730bed87c59)
+
