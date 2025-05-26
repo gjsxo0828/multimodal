@@ -87,6 +87,7 @@ AutoTokenizer.build_inputs_with_special_tokens = build_inputs_with_special_token
 ```
 
 ### Annotation dataframe
+
 ```python
 df=  pd.read_csv(CFG.ANNOTATION_FILE)
 train_df , val_df = train_test_split(df , test_size = 0.2)
@@ -149,26 +150,6 @@ class ImgDataset(Dataset):
         return encoding
 ```
 
-```python
-# 학습 데이터셋 생성: train_df와 설정된 이미지 디렉토리, 토크나이저, feature_extractor, 그리고 transform 적용
-train_dataset = ImgDataset(
-    train_df, 
-    root_dir=CFG.IMAGE_DIR,
-    tokenizer=tokenizer,
-    feature_extractor=feature_extractor,
-    transform=transforms
-)
-
-# 검증 데이터셋 생성: val_df를 사용
-val_dataset = ImgDataset(
-    val_df, 
-    root_dir=CFG.IMAGE_DIR,
-    tokenizer=tokenizer,
-    feature_extractor=feature_extractor, 
-    transform=transforms
-)
-```
-
 ## Model
 
 ### ViT Encoder  
@@ -224,7 +205,46 @@ training_args = Seq2SeqTrainingArguments(
 ```
 
 ### Seq2Seq Trainer
+```python
+# Seq2SeqTrainer 인스턴스 생성: 모델, 토크나이저, 학습 인자, 데이터셋, 데이터 콜레이터 등을 지정
+trainer = Seq2SeqTrainer(
+    tokenizer=feature_extractor,         # 입력 데이터를 처리하기 위한 feature_extractor 사용
+    model=model,                         # 사용할 모델
+    args=training_args,                  # 학습 관련 설정 인자
+    train_dataset=train_dataset,         # 학습 데이터셋
+    eval_dataset=val_dataset,            # 검증 데이터셋
+    data_collator=default_data_collator, # 데이터 배치(collation) 함수
+)
+
+# 학습 시작
+trainer.train()
+```
 
 ```python
+trainer.save_model('VIT_large_gpt2')
+```
 
+```python
+# 학습 후, 테스트 이미지 하나를 불러와서 열기 (RGB 모드)
+img =  Image.open("/mnt/elice/dataset/Images/1001773457_577c3a7d70.jpg").convert("RGB")
+img
+```
+
+```python
+# 테스트 이미지에 대해 feature_extractor를 적용하여 픽셀 값을 생성하고,
+# 이를 모델의 generate 메서드에 전달하여 생성된 캡션을 디코딩 후 출력
+generated_caption = tokenizer.decode(model.generate(feature_extractor(img, return_tensors="pt").pixel_values.to("cuda"))[0])
+
+# 생성된 캡션의 앞 85글자를 시각적으로 강조하여 출력 (ANSI escape code 사용)
+print('\033[96m' +generated_caption[:85]+ '\033[0m')
+```
+
+```python
+img =  Image.open("/mnt/elice/dataset/Images/1000268201_693b08cb0e.jpg").convert("RGB")
+img  
+```
+
+```python
+generated_caption = tokenizer.decode(model.generate(feature_extractor(img, return_tensors="pt").pixel_values.to("cuda"))[0])
+print('\033[96m' +generated_caption[:120]+ '\033[0m')
 ```
