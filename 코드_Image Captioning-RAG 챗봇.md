@@ -201,6 +201,7 @@ image_contexts = generate_text_contexts(image_captions)
 
 
 ```python
+
 documents = []
 for i in range(len(text_contexts)):
     documents.append(Document(page_content=f"{text_contexts[i]}\n\n{splitted_texts[i]}"))
