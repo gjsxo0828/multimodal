@@ -46,25 +46,29 @@ from PIL import Image
 
 준비된 PDF 를 기반으로 문서를 로드하고 문서 내에 있는 텍스트와 이미지를 추출해 보겠습니다. 예시 PDF는 위키피디아 영문판에 업로드 된 삼성전자 문서입니다. 삼성전자의 로고 변천사와 같은 이미지를 RAG 를 통해 제대로 추출하고 답변을 진행할 수 있을지 확인해 봅시다.
 
-![image-4.png](image-4.png)
+![image](https://github.com/user-attachments/assets/c69b68ef-2157-4303-a6ee-3ea66dbfb5b4)
+
 
 
 ```python
 # PDF 에서 엘리멘트를 추출합니다.
 def extract_pdf_elements(filepath):
+    #unstructred : 비정형 문서(Unstructured Data)를 구조화된 데이터로 변환하는 오픈소스 파이썬 라이브러리
+    # -> partition_pdf : PDF 파일을 페이지별로 분석하여 텍스트, 이미지, 표 등 다양한 엘리먼트로 분할
     return partition_pdf(
         filename=filepath,
-        extract_images_in_pdf=True,
-        max_characters=4000,
-        new_after_n_chars=3800,
-        combine_text_under_n_chars=2000,
-        extract_image_block_output_dir="./images",
+        extract_images_in_pdf=True, # 이미지 추출 여부
+        max_characters=4000, # 한 엘리먼트에 속할 최대 문자 수 (넘을 시 분할하여 저장)
+        new_after_n_chars=3800, # 새 엘리먼트로 분할할 문자 수
+        combine_text_under_n_chars=2000, # 엘리먼트 내 문자 수가 해당 값 미만일 경우, 이전 엘레먼트와 결합
+        extract_image_block_output_dir="./images", # 추출된 이미지를 저장할 디렉토리 경로
     )
 
 
 # PDF 에서 텍스트를 추출합니다.
 def extract_text(raw_pdf_elements):
     texts = []
+    # 이미지 엘리먼트는 이미지의 실제 바이너리 데이터가 아니라, 메타 데이터가 저장되어있음
     for element in raw_pdf_elements:
         texts.append(str(element))
     return texts
@@ -87,7 +91,8 @@ Ollama 에 의해 로컬로 호스팅된 Llama 3.1 LLM을 이용해 이미지와
 
 이번 실습에서는 Anthropic 에서 발표한 [contextual retrieval](https://www.anthropic.com/news/contextual-retrieval) 기술을 적용해 보겠습니다.
 
-![image.png](image.png)
+!![image](https://github.com/user-attachments/assets/ab7a0057-bce4-4655-a767-24ca95fea06b)
+
 
 
 ```python
