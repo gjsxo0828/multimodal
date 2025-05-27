@@ -88,8 +88,8 @@ display(IPImage(data=base64.b64decode(base64_image)))
 
 
     
-![png](output_11_0.png)
-    
+![image](https://github.com/user-attachments/assets/31391de5-62e6-4d77-b070-8c43f5feec26)
+
 
 
 ## 2. VQA 체인 테스트
