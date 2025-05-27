@@ -53,22 +53,19 @@ from PIL import Image
 ```python
 # PDF 에서 엘리멘트를 추출합니다.
 def extract_pdf_elements(filepath):
-    #unstructred : 비정형 문서(Unstructured Data)를 구조화된 데이터로 변환하는 오픈소스 파이썬 라이브러리
-    # -> partition_pdf : PDF 파일을 페이지별로 분석하여 텍스트, 이미지, 표 등 다양한 엘리먼트로 분할
     return partition_pdf(
         filename=filepath,
-        extract_images_in_pdf=True, # 이미지 추출 여부
-        max_characters=4000, # 한 엘리먼트에 속할 최대 문자 수 (넘을 시 분할하여 저장)
-        new_after_n_chars=3800, # 새 엘리먼트로 분할할 문자 수
-        combine_text_under_n_chars=2000, # 엘리먼트 내 문자 수가 해당 값 미만일 경우, 이전 엘레먼트와 결합
-        extract_image_block_output_dir="./images", # 추출된 이미지를 저장할 디렉토리 경로
+        extract_images_in_pdf=True,
+        max_characters=4000,
+        new_after_n_chars=3800,
+        combine_text_under_n_chars=2000,
+        extract_image_block_output_dir="./images",
     )
 
 
 # PDF 에서 텍스트를 추출합니다.
 def extract_text(raw_pdf_elements):
     texts = []
-    # 이미지 엘리먼트는 이미지의 실제 바이너리 데이터가 아니라, 메타 데이터가 저장되어있음
     for element in raw_pdf_elements:
         texts.append(str(element))
     return texts
@@ -81,9 +78,11 @@ texts = extract_text(pdf_elements)
 text_splitter = CharacterTextSplitter.from_tiktoken_encoder(
 separator = '\n', chunk_size=1000, chunk_overlap=0
 )
+
 #CharacterTextSplitter : 구분자를 기준으로 분할 (기본 구분자 : '\n\n')
-chunk_size : 한 청크(조각)에 들어갈 최대 토큰 수
-chunk_overlap : 청크 간 중복되는 토큰 수
+#chunk_size :  한 청크(조각)에 들어갈 최대 토큰 수
+#chunk_overlap : # 청크 간 중복되는 토큰 수
+
 joined_texts = "\n".join(texts) #텍스트들 하나의 문자열로 합침
 splitted_texts = text_splitter.split_text(joined_texts)
 #split_text : 정의한 splitter로 문자열을 분할
@@ -105,7 +104,7 @@ def generate_text_contexts(texts):
     # Contextual Retrieval 을 진행합니다.
     prompt_text = f"""
     <document>
-    {joined_texts.replace('{', '(').replace('}', ')')}
+    {joined_texts.replace('{', '(').replace('}', ')')} # context 안에 중괄호가 있으면 에러가 발생할 수 있어서 전처리 추가
     </document>
     Here is the chunk we want to situate within the whole document:
     <chunk>
@@ -113,7 +112,11 @@ def generate_text_contexts(texts):
     </chunk>
     Please give a short succinct context to situate this chunk within the overall document for the purposes of improving search retrieval of the chunk. Answer only with the succinct context and nothing else.
     """
-    prompt = ChatPromptTemplate.from_template(prompt_text)
+    #joined_texts: pdf 내 모든 text(하나의 str)
+    
+
+
+    prompt = ChatPromptTemplate.from_template(prompt_text) #가변적인 프롬프트 텍스트 생성
 
     # Llama 3.1 모델을 이용해 요약본을 생성합니다.
     model = OllamaLLM(model="llama3.1")
@@ -121,7 +124,8 @@ def generate_text_contexts(texts):
 
     # 동시에 5 개의 쿼리를 진행하며 배치 프로세싱을 진행합니다.
     text_contexts = summarize_chain.batch(texts, {"max_concurrency": 5})
-    
+    # mzx_concurrency : 최대 병렬 처리 수
+    # batch : 해당 chain의 input을 여러개 입력 -> 독립적으로 캡셔닝 추출
     return text_contexts
 
 text_contexts = generate_text_contexts(splitted_texts)
@@ -129,20 +133,29 @@ text_contexts = generate_text_contexts(splitted_texts)
 
 컨텍스트 추출이 잘 되었는지 한번 확인해 봅시다.
 
+```python
+len(text_contexts)
+```
 
 ```python
-text_contexts[0][:300]
+text_contexts[0]
+```
+
+```python
+text_contexts[0][:300] #chunk의 문맥 정보 (Caption)
 ```
 
 
 ```python
-splitted_texts[0][:300]
+splitted_texts[0][:300] #실제 document의 chunk
 ```
 
 컨텍스트 기반 추출 및 요약이 깔끔하게 된 것을 알 수 있습니다. 다음으로 이미지 캡셔닝을 진행해 보겠습니다. 이전 실습에서 진행했던 프롬프트와 한번 비교해 보시기 바랍니다.
 
 
 ```python
+## 이미지 캡셔닝
+
 # 이전 실습과 같은 방식으로 base64 인코딩을 진행합니다.
 def encode_image(image_path):
     with open(image_path, "rb") as image_file:
