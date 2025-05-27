@@ -230,6 +230,7 @@ trainer.save_model('VIT_large_gpt2')
 img =  Image.open("/mnt/elice/dataset/Images/1001773457_577c3a7d70.jpg").convert("RGB")
 img
 ```
+![image](https://github.com/user-attachments/assets/0ac8fe2b-f7e6-495a-ad9c-ddfed418d533)
 
 ```python
 # 테스트 이미지에 대해 feature_extractor를 적용하여 픽셀 값을 생성하고,
@@ -244,8 +245,10 @@ print('\033[96m' +generated_caption[:85]+ '\033[0m')
 img =  Image.open("/mnt/elice/dataset/Images/1000268201_693b08cb0e.jpg").convert("RGB")
 img  
 ```
+![image](https://github.com/user-attachments/assets/a4686624-b85a-46bf-a084-9023e800d748)
 
 ```python
 generated_caption = tokenizer.decode(model.generate(feature_extractor(img, return_tensors="pt").pixel_values.to("cuda"))[0])
 print('\033[96m' +generated_caption[:120]+ '\033[0m')
 ```
+> <|endoftext|>A little girl in a pink dress stands in front of a house . . . and a little boy in a blue dress stands behi
