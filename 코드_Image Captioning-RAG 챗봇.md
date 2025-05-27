@@ -79,10 +79,14 @@ texts = extract_text(pdf_elements)
 
 # 1000 개의 토큰을 기준으로 텍스트를 나눕니다.
 text_splitter = CharacterTextSplitter.from_tiktoken_encoder(
-    chunk_size=1000, chunk_overlap=0
+separator = '\n', chunk_size=1000, chunk_overlap=0
 )
-joined_texts = " ".join(texts)
+#CharacterTextSplitter : 구분자를 기준으로 분할 (기본 구분자 : '\n\n')
+chunk_size : 한 청크(조각)에 들어갈 최대 토큰 수
+chunk_overlap : 청크 간 중복되는 토큰 수
+joined_texts = "\n".join(texts) #텍스트들 하나의 문자열로 합침
 splitted_texts = text_splitter.split_text(joined_texts)
+#split_text : 정의한 splitter로 문자열을 분할
 ```
 
 ## 2. 벡터 인덱싱
