@@ -282,12 +282,16 @@ chain_multimodal_rag = multi_modal_rag_chain(retriever)
 query = "What products does Samsung make?"
 display(Markdown(chain_multimodal_rag.invoke(query)))
 ```
+![image](https://github.com/user-attachments/assets/137de873-0c40-48af-929e-6032a64c26d3)
 
 
 ```python
 query = "When was the Samsung logo with red used?"
 display(Markdown(chain_multimodal_rag.invoke(query)))
 ```
+
+![image](https://github.com/user-attachments/assets/e88823fd-232e-4097-8eed-8492cdd29e27)
+
 
 ### 성능
 
