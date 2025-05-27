@@ -240,6 +240,7 @@ generated_caption = tokenizer.decode(model.generate(feature_extractor(img, retur
 # 생성된 캡션의 앞 85글자를 시각적으로 강조하여 출력 (ANSI escape code 사용)
 print('\033[96m' +generated_caption[:85]+ '\033[0m')
 ```
+> <|endoftext|>A black and white dog is running through the grass . . . a white and bro
 
 ```python
 img =  Image.open("/mnt/elice/dataset/Images/1000268201_693b08cb0e.jpg").convert("RGB")
